@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>sshwebdoor Access</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background-color: #0f172a; color: #e2e8f0; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .card { background: #1e293b; padding: 2rem; border-radius: 0.75rem; box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.5); width: 320px; }
+        h1 { margin-top: 0; font-size: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; }
+        input[type="password"] { width: 100%; padding: 0.5rem; border-radius: 0.5rem; border: none; margin-bottom: 1rem; }
+        button { width: 100%; padding: 0.75rem; border: none; border-radius: 0.5rem; background: #38bdf8; color: #0f172a; font-weight: 600; cursor: pointer; }
+        button:hover { background: #0ea5e9; }
+        .message { margin-bottom: 1rem; padding: 0.75rem; border-radius: 0.5rem; background: rgba(248, 113, 113, 0.2); color: #fca5a5; }
+        .success { background: rgba(74, 222, 128, 0.2); color: #bbf7d0; }
+        .meta { font-size: 0.875rem; color: #94a3b8; margin-top: 1rem; text-align: center; }
+        .locked { text-align: center; font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Secure Access</h1>
+        {{if .Message}}
+        <div class="message {{if .Success}}success{{end}}">{{.Message}}</div>
+        {{end}}
+        {{if .Locked}}
+            <p class="locked">Service locked. Try again in {{.LockoutRemainingSeconds}} seconds.</p>
+        {{else if .Success}}
+            <p class="meta">Authentication succeeded.</p>
+        {{else}}
+        <form method="post" action="/login">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" autofocus />
+            <button type="submit">Enter</button>
+        </form>
+        <p class="meta">Attempts remaining: {{.AttemptsLeft}}</p>
+        {{end}}
+    </div>
+</body>
+</html>
