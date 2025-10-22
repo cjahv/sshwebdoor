@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SSH Webdoor Access</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, #0a2239 0%, #0d314f 100%);
+      color: #f3f6fb;
+    }
+    .card {
+      background: rgba(10, 15, 30, 0.85);
+      padding: 2.5rem;
+      border-radius: 16px;
+      width: min(420px, 90vw);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+    }
+    h1 {
+      margin-top: 0;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    form {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    label {
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+    input[type=password] {
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255, 255, 255, 0.12);
+      color: inherit;
+      font-size: 1.05rem;
+    }
+    input[type=password]:focus {
+      outline: 2px solid rgba(45, 160, 255, 0.75);
+      outline-offset: 2px;
+    }
+    button {
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #2da0ff, #0b7fe3);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .meta {
+      font-size: 0.9rem;
+      opacity: 0.75;
+    }
+    .message {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      background: rgba(255, 70, 70, 0.2);
+      color: #ffdede;
+    }
+    .success {
+      background: rgba(70, 255, 170, 0.15);
+      color: #dbffef;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Secure Access Portal</h1>
+    <p class="meta">Enter the administrator password to continue.</p>
+    {{if .Message}}
+      <div class="message {{if .Success}}success{{end}}">{{.Message}}</div>
+    {{end}}
+    {{if .Locked}}
+      <p class="meta">Too many failed attempts. Please try again in <strong>{{.LockoutRemaining}}</strong>.</p>
+    {{else}}
+      <form method="post" action="/login">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="off" autofocus required />
+        <p class="meta">Attempts remaining: {{.AttemptsRemaining}}</p>
+        <button type="submit">Continue</button>
+      </form>
+    {{end}}
+  </div>
+</body>
+</html>
